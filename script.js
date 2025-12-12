@@ -1,6 +1,6 @@
 const API_KEY = 'fd41bb0df8a2406abff005370b6db75a';
 // News API'den Türkiye'deki güncel manşetleri çekiyoruz
-const API_URL = `https://newsapi.org/v2/top-headlines?country=tr&apiKey=${API_KEY}`;
+const API_URL = `https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=${API_KEY}`;
 const haberlerAlani = document.getElementById('haberler-alani');
 
 // API'dan haberleri çeken ana fonksiyon
