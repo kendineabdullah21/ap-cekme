@@ -3,22 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ Hızlı Haber Başlıkları</title>
+    <title>📰 Modern Haber Akışı</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <header>
-        <h1>Günün Manşetleri</h1>
-        <p>News API ile çekilen güncel haberler</p>
+    <header class="site-header">
+        <div class="container">
+            <h1 class="logo">FLASH HABER</h1>
+            <p class="slogan">Günün Öne Çıkan Başlıkları</p>
+        </div>
     </header>
 
-    <main id="haberler-alani">
-        <div class="yukleniyor">Haberler yükleniyor... Lütfen bekleyiniz.</div>
+    <main class="container">
+        <section id="haberler-alani" class="haber-grid">
+            <div class="yukleniyor">Haberler yükleniyor... Lütfen bekleyiniz.</div>
+        </section>
     </main>
 
-    <footer>
-        <p>&copy; 2025 Basit Haber Sitesi | Veri Kaynağı: News API</p>
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 Modern Haber Sitesi | Powered by News API</p>
+        </div>
     </footer>
 
     <script src="script.js"></script>
