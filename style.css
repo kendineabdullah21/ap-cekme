@@ -1,99 +1,150 @@
+/* Genel Ayarlar ve Fontlar */
+:root {
+    --primary-color: #007bff; /* Mavi - Başlıklar ve vurgu */
+    --secondary-color: #28a745; /* Yeşil - Butonlar */
+    --background-light: #f4f7f9; /* Açık arka plan */
+    --text-dark: #333333; /* Koyu metin */
+    --text-light: #555555; /* Açık metin */
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', sans-serif; /* Okunaklı gövde metni */
     margin: 0;
     padding: 0;
-    background-color: #f4f7f9;
-    color: #333;
+    background-color: var(--background-light);
+    color: var(--text-dark);
     line-height: 1.6;
 }
 
-header {
-    background-color: #007bff;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-    margin-top: 0;
-}
-
-#haberler-alani {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
-    padding: 25px;
+/* Kapsayıcı (Merkezleme) */
+.container {
     max-width: 1200px;
-    margin: 20px auto;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
+/* Başlık Alanı (Header) */
+.site-header {
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px 0;
+    margin-bottom: 30px;
+}
+
+.logo {
+    font-family: 'Playfair Display', serif; /* Şık logo fontu */
+    color: var(--primary-color);
+    font-size: 2.2em;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+.slogan {
+    font-size: 1em;
+    color: var(--text-light);
+    margin: 5px 0 0;
+}
+
+/* Haber Grid Düzeni (Main Content) */
+.haber-grid {
+    display: grid;
+    /* 300px'den küçük olmamak şartıyla otomatik sütunlar */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+/* Haber Kartı */
 .haber-karti {
     background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
     overflow: hidden;
-    transition: transform 0.2s;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     display: flex;
     flex-direction: column;
 }
 
 .haber-karti:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
 .haber-karti img {
     width: 100%;
     height: 200px;
-    object-fit: cover;
+    object-fit: cover; /* Resmi kesmeden sığdır */
+}
+
+.haber-icerik {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 .haber-karti h2 {
-    font-size: 1.25em;
-    padding: 15px 15px 5px;
-    margin: 0;
+    font-size: 1.3em;
+    color: var(--text-dark);
+    margin: 0 0 10px;
 }
 
 .haber-karti p {
-    padding: 0 15px;
     font-size: 0.9em;
-    color: #555;
-    flex-grow: 1; /* Açıklamayı esneterek butonu alta iter */
+    color: var(--text-light);
+    margin-bottom: 20px;
+    flex-grow: 1; /* Açıklama alanını esnetir */
 }
 
+/* Buton Stili */
 .oku-butonu {
-    display: block;
-    text-align: center;
+    display: inline-block;
     padding: 10px 15px;
-    margin: 15px;
-    background-color: #28a745;
+    background-color: var(--secondary-color);
     color: white;
     text-decoration: none;
     border-radius: 5px;
+    text-align: center;
     transition: background-color 0.2s;
+    font-weight: 600;
+    align-self: flex-start; /* Sadece içeriği kadar yer kaplamasını sağlar */
 }
 
 .oku-butonu:hover {
-    background-color: #218838;
+    background-color: #1e7e34;
 }
 
+/* Yüklenme ve Hata Mesajları */
 .yukleniyor, .hata {
-    grid-column: 1 / -1; /* Tüm sütunları kapla */
+    grid-column: 1 / -1; 
     text-align: center;
     padding: 50px;
-    font-size: 1.2em;
-    color: #007bff;
+    font-size: 1.5em;
+    color: var(--primary-color);
 }
 
 .hata {
-    color: #dc3545;
+    color: #dc3545; /* Kırmızı hata rengi */
 }
 
-footer {
-    text-align: center;
-    padding: 15px;
-    background-color: #333;
+/* Alt Bilgi (Footer) */
+.site-footer {
+    background-color: var(--text-dark);
     color: white;
+    padding: 20px 0;
+    margin-top: 50px;
+    text-align: center;
     font-size: 0.8em;
+}
+
+/* Mobil Uyumluluk (Opsiyonel ama Önerilir) */
+@media (max-width: 600px) {
+    .haber-grid {
+        grid-template-columns: 1fr; /* Tek sütuna düşür */
+    }
+    .site-header {
+        text-align: center;
+    }
+    .logo {
+        font-size: 1.8em;
+    }
 }
