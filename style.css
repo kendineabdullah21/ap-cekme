@@ -167,3 +167,49 @@ body {
 button:active {
     transform: scale(0.9);
 }
+
+/* Butonları yan yana dizen kapsayıcı */
+.buton-grubu {
+    display: flex;
+    gap: 10px; /* Butonlar arası boşluk */
+    margin-top: 15px;
+    align-items: center;
+}
+
+/* Haberi Oku butonu genişleyerek alanı kaplar */
+.oku-butonu {
+    flex: 1; 
+    background-color: #28a745;
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+/* Favori butonu kare ve şık durur */
+.favori-butonu {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f1f2f6;
+    border: 1px solid #dfe4ea;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.2s ease;
+}
+
+.favori-butonu:hover {
+    background-color: #dfe4ea;
+    transform: scale(1.05);
+}
+
+.favori-aktif {
+    background-color: #ffdae0 !important;
+    border-color: #ff4757 !important;
+}
