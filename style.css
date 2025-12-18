@@ -149,20 +149,21 @@ body {
     }
 }
 
-.fav-btn {
-    background-color: #ffcc00;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
+.butonlar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.haberi-oku {
     transition: 0.3s;
 }
 
-.fav-btn:hover {
-    background-color: #e6b800;
+.haberi-oku:hover {
+    background-color: #218838;
 }
 
-.nav-menu {
-    margin-top: 10px;
+/* Kalp butonuna tıklandığında hafif bir büyüme efekti */
+button:active {
+    transform: scale(0.9);
 }
