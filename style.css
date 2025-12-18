@@ -148,3 +148,21 @@ body {
         font-size: 1.8em;
     }
 }
+
+.fav-btn {
+    background-color: #ffcc00;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.fav-btn:hover {
+    background-color: #e6b800;
+}
+
+.nav-menu {
+    margin-top: 10px;
+}
