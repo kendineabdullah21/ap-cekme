@@ -2,80 +2,69 @@ const API_KEY = 'fd41bb0df8a2406abff005370b6db75a';
 const API_URL = `https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=${API_KEY}`;
 const haberlerAlani = document.getElementById('haberler-alani');
 
-// --- 1. STATE (DURUM) NESNESİ ---
-// Uygulamanın hafızası burasıdır.
 const state = {
     articles: [],
-    favorites: JSON.parse(localStorage.getItem('haber_favorileri')) || [], // Varsa tarayıcıdan al
+    favorites: JSON.parse(localStorage.getItem('haber_favorileri')) || [],
     loading: false,
     error: null
 };
 
-// --- 2. VERİ ÇEKME FONKSİYONU ---
 async function haberleriGetir() {
     state.loading = true;
     state.error = null;
-    render(); // Yükleniyor durumunu göstermek için ilk çizim
+    render();
 
     try {
         const response = await fetch(API_URL);
         if (!response.ok) throw new Error(`API hatası: ${response.status}`);
-
         const data = await response.json();
         state.articles = data.articles || [];
-        
     } catch (error) {
-        console.error("Hata:", error);
         state.error = error.message;
     } finally {
         state.loading = false;
-        render(); // Veri geldiğinde veya hata olduğunda son çizim
+        render();
     }
 }
 
-// --- 3. FAVORİ EKLEME/ÇIKARMA (STATE GÜNCELLEME) ---
-function favoriToggle(url) {
+// --- JAVA BACKEND BAĞLANTILI FAVORİ FONKSİYONU ---
+async function favoriToggle(url) {
     const index = state.favorites.findIndex(f => f.url === url);
+    const haber = state.articles.find(a => a.url === url);
 
     if (index === -1) {
-        // Favorilerde yoksa ekle
-        const haber = state.articles.find(a => a.url === url);
+        // 1. Durum: Favorilere Ekle
         state.favorites.push(haber);
+        
+        // Java API'ye Kaydet (Stateful yapmak için)
+        try {
+            await fetch('http://localhost:8080/api/favorites', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: haber.title,
+                    url: haber.url,
+                    urlToImage: haber.urlToImage,
+                    description: haber.description
+                })
+            });
+        } catch (err) { console.error("DB Kayıt Hatası:", err); }
+
     } else {
-        // Favorilerde varsa çıkar
+        // 2. Durum: Favorilerden Çıkar
         state.favorites.splice(index, 1);
+        // İstersen buraya DELETE isteği de ekleyebilirsin
     }
 
-    // LocalStorage'a kaydet (Sayfa yenilense de gitmesin)
     localStorage.setItem('haber_favorileri', JSON.stringify(state.favorites));
-    
-    // Durum değişti, ekranı tekrar çiz!
     render();
 }
 
-// --- 4. RENDER (EKRANA ÇİZME) FONKSİYONU ---
 function render() {
     haberlerAlani.innerHTML = '';
+    if (state.loading) { haberlerAlani.innerHTML = '<p class="mesaj">Yükleniyor...</p>'; return; }
+    if (state.error) { haberlerAlani.innerHTML = `<p class="hata">Hata: ${state.error}</p>`; return; }
 
-    // Yüklenme durumu
-    if (state.loading) {
-        haberlerAlani.innerHTML = '<p class="mesaj">Haberler yükleniyor...</p>';
-        return;
-    }
-
-    // Hata durumu
-    if (state.error) {
-        haberlerAlani.innerHTML = `<p class="hata">Hata oluştu: ${state.error}</p>`;
-        return;
-    }
-
-    // Haber yoksa
-    if (state.articles.length === 0) {
-        haberlerAlani.innerHTML = '<p class="mesaj">Haber bulunamadı.</p>';
-        return;
-    }
-
-    // Haberleri listele
     state.articles.forEach(haber => {
         const isFav = state.favorites.some(f => f.url === haber.url);
         const haberKarti = haberKartiOlustur(haber, isFav);
@@ -83,31 +72,24 @@ function render() {
     });
 }
 
-// --- 5. HABER KARTI OLUŞTURUCU (HTML GENERATOR) ---
 function haberKartiOlustur(haber, isFav) {
     const kartDiv = document.createElement('div');
     kartDiv.classList.add('haber-karti');
 
-    // Favori butonunun rengini duruma göre belirle
-    const favButonStili = isFav ? 'background-color: #ff4757;' : 'background-color: #747d8c;';
-    const favButonMetni = isFav ? '❤️ Favorilerden Çıkar' : '🤍 Favorilere Ekle';
-
     kartDiv.innerHTML = `
-        <img src="${haber.urlToImage || 'https://via.placeholder.com/300x200?text=Resim+Yok'}" alt="${haber.title}">
+        <img src="${haber.urlToImage || 'https://via.placeholder.com/300x200'}" alt="${haber.title}">
         <div class="haber-icerik">
             <h2>${haber.title || 'Başlık Yok'}</h2>
-            <p>${haber.description || 'Açıklama mevcut değil.'}</p>
-            <div class="butonlar">
-                <a href="${haber.url}" target="_blank" class="oku-butonu">Haberi Oku →</a>
-                <button onclick="favoriToggle('${haber.url}')" class="favori-butonu" style="${favButonStili}">
-                    ${favButonMetni}
+            <p>${haber.description ? haber.description.substring(0, 100) + '...' : 'Açıklama yok.'}</p>
+            <div class="butonlar" style="display: flex; gap: 10px; margin-top: 10px;">
+                <a href="${haber.url}" target="_blank" class="haberi-oku" style="background-color: #28a745; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; flex-grow: 1; text-align: center;">Haberi Oku →</a>
+                <button onclick="favoriToggle('${haber.url}')" style="background: none; border: 1px solid #ddd; cursor: pointer; padding: 5px 10px; border-radius: 5px; font-size: 1.2rem;">
+                    ${isFav ? '❤️' : '🤍'}
                 </button>
             </div>
         </div>
     `;
-
     return kartDiv;
 }
 
-// Uygulamayı başlat
 haberleriGetir();
